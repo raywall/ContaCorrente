@@ -1,0 +1,63 @@
+﻿@{ 
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mr. Bank</title>
+    <link rel="stylesheet" href="~/Content/css/login.min.css?v=@DateTime.Now.ToString("ddMMyyyyHHmmss")" />
+    <link rel="stylesheet" href="~/Content/fonts/font-awesome.min.css?v=@DateTime.Now.ToString("ddMMyyyyHHmmss")">
+
+    <link rel="stylesheet" href="~/Content/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/Content/bootstrap/css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="~/Content/css/ionicons.min.css" />
+</head>
+<body style="background-color:#2c3e50 !important; position:relative;">
+    <div class="login-clean">
+        @using (Html.BeginForm())
+        {
+            <h2 class="sr-only">Login Form</h2>
+
+            <div class="illustration">
+                <i class="fa fa-bank" style="color:#2c3e50 !important;"></i>
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="text" name="usuario" placeholder="Usuário" value='@ViewBag.Usuario'>
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="password" name="senha" placeholder="Senha" value='@ViewBag.Senha'>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary btn-block" style="background:#18bc9c;" type="submit">Acessar</button>
+            </div>
+
+            <span class="forgot"></span>
+
+            if (!string.IsNullOrEmpty(ViewBag.Mensagem))
+            {
+                <div class="form-group mensagem">
+                    @ViewBag.Mensagem
+                </div>
+            }
+        }
+    </div>
+
+    <script src="~/Content/js/jquery.min.js"></script>
+    <script src="~/Content/bootstrap/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $('.login-clean').css({ height: $(window).innerHeight() });
+
+            $(window).resize(function () {
+                $('.login-clean').css({ height: $(window).innerHeight() });
+            });
+        });
+    </script>
+</body>
+</html>

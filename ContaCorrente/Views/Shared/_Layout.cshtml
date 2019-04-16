@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
+    <title>Mr. Bank</title>
+
+    <link rel="stylesheet" href="~/Content/bootstrap/css/bootstrap.min.css?v=@DateTime.Now.ToString("ddMMyyyyHHmmss")">
+    <link rel="stylesheet" href="~/Content/fonts/font-awesome.min.css?v=@DateTime.Now.ToString("ddMMyyyyHHmmss")">
+    <link rel="stylesheet" href="~/Content/fonts/ionicons.min.css?v=@DateTime.Now.ToString("ddMMyyyyHHmmss")">
+    <link rel="stylesheet" href="~/Content/css/styles.min.css?v=@DateTime.Now.ToString("ddMMyyyyHHmmss")">
+    <link rel="stylesheet" href="~/Content/css/bootstrap-datepicker3.standalone.min.css?v=@DateTime.Now.ToString("ddMMyyyyHHmmss")">
+
+    <link rel="stylesheet" href="~/Content/css/fonts/Aclonica.css" />
+    <link rel="stylesheet" href="~/Content/css/fonts/Aldrich.css" />
+    <link rel="stylesheet" href="~/Content/css/fonts/Lato.css" />
+    <link rel="stylesheet" href="~/Content/css/fonts/Montserrat.css" />
+
+    <script src="~/Content/js/jquery.min.js"></script>
+    <script src="~/Content/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/Content/js/jquery.easing.min.js"></script>
+    <script src="~/Content/js/script.min.js"></script>
+
+    <script src="~/Content/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/Content/js/bootstrap-datepicker.pt-BR.min.js"></script>
+
+    <script type="text/javascript">
+        function validar(obj, e) {
+            return ((e.keyCode > 47 && e.keyCode < 58) || e.keyCode == 46);
+        }
+    </script>
+</head>
+
+<body id="page-top" style="background:#18bc9c !important">
+    <nav class="navbar navbar-light navbar-expand-lg fixed-top bg-secondary text-uppercase" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand js-scroll-trigger" href="#page-top" style="font-family: Aclonica, sans-serif;"><i class="fa fa-credit-card-alt"></i>&nbsp; mr. Bank</a>
+            <button data-toggle="collapse" data-target="#navbarResponsive" class="navbar-toggler navbar-toggler-right text-uppercase bg-primary text-white rounded" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fa fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="nav navbar-nav ml-auto">
+                    <li class="nav-item mx-0 mx-lg-1" role="presentation">@Html.ActionLink("Contas", "MovimentaConta", "Contas", new { @class = "nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" })</li>
+                    <li class="nav-item mx-0 mx-lg-1" role="presentation">@Html.ActionLink("Extrato", "VisualizaExtrato", "Contas", new { @class = "nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" })</li>
+                    <li class="nav-item mx-0 mx-lg-1" role="presentation">@Html.ActionLink("Sair", "Logout", "Login", new { IDUsuario = @ViewBag.IDUsuario }, new { @class = "nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger", @style = "margin-right:0px !important; padding-right:0px !important;" })</li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <header class="masthead bg-primary text-white text-center" style="background: url(/Content/img/financial-background.jpg) no-repeat top; background-size:100%;">
+        <div class="page-content-wrapper">
+            @if (!string.IsNullOrEmpty(ViewBag.Mensagem))
+            {
+                <siv style="width:100%; padding:5px;">
+                    @ViewBag.Mensagem
+                </siv>
+            }
+
+            <div class="container" style="margin-bottom:150px;">
+                @RenderBody()
+            </div>
+        </div>
+    </header>
+
+    <div class="footer-basic" style="padding-bottom:0 !important; position:fixed; right:0; bottom:0; left:0; border-top:2px solid #2c3e50 !important;">
+        <footer>
+            <div class="social">
+                <a href="http://www.instagram.com/ray.malheiros" target="_blank"><i class="icon ion-social-instagram"></i></a>
+                <a href="http://www.twitter.com/RaywallMS" target="_blank"><i class="icon ion-social-twitter"></i></a>
+                <a href="http://www.facebook.com/raywall.malheiros" target="_blank"><i class="icon ion-social-facebook"></i></a>
+            </div>
+
+            <p class="copyright">Mr. Bank © 2019</p>
+        </footer>
+    </div>
+</body>
+</html>

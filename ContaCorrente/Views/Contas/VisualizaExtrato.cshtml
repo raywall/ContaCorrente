@@ -1,0 +1,244 @@
+﻿@using ContaCorrente.Extensions;
+
+@{
+    ViewBag.Title = "Mr. Bank - Extrato bancário";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var conta = new ContaCorrente.Business.ContaDao().Carregar((long)ViewBag.IDConta);
+    int line = 0;
+}
+
+<link rel="stylesheet" href="~/Content/css/formularios.css?v=@DateTime.Now.ToString("ddMMyyyyHHmmss")">
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.abrelancamento').click(function () {
+            $('#lancamento-modal').show();
+        });
+
+        $('#submit').click(function () {
+            if ($('#TiposLancamento').children("option:selected").val() != 1 && $('#TiposLancamento').children("option:selected").val() != 2) {
+                $('#hTiposLancamento').show();
+                return;
+            }
+            else
+                $('#hTiposLancamento').hide();
+
+            if ($('#descricao').val().length <= 3) {
+                $('#hdescricao').show();
+                return;
+            }
+            else
+                $('#hdescricao').hide();
+
+
+            if ($('#valorlancamento').val().length == 0 || $('#valorlancamento').val() <= 0) {
+                $('#hvalorlancamento').show();
+                return;
+            }
+            else
+                $('#hvalorlancamento').hide();
+
+            $('#lancamentoForm').submit();
+        });
+
+        $('.close').click(function () {
+            $('#lancamento-modal').hide();
+        });
+    });
+</script>
+
+<div class="table-responsive" style="font-size:13px;">
+    <table class="table">
+        <tr>
+            <td style="width:100%; text-align:left; position:relative; margin-bottom:40px; vertical-align:bottom; color:#FFF; border-top:none; position:relative;">
+                <div style="position:absolute; top:0; left:0; display:inline-block; text-align:left; font-size:22px;">@string.Format("{0} - CC: {1}", conta.Nome, conta.idConta.ToString())</div>
+                <div style="position:absolute; top:0; right:0; display:inline-block; text-align:right; cursor:pointer; padding:8px 0;" class="abrelancamento">novo lançamento</div>
+            </td>
+        </tr>
+    </table>
+
+    <div style="display:block; margin:15px 0px 35px 0px; padding:10px; border-left:1px solid #e7e7e7; border-right: 1px solid #e7e7e7; border-bottom:1px solid #e7e7e7; background:#fafafa;">
+        <table class="table noBorder" style="text-align:left; margin-top:10px;">
+            <tr>
+                <td>
+                    <table class="table">
+                        <tr style="width:100%;">
+                            <td width="50%" valign="top">
+                                <table class="table">
+                                    <tr class="white">
+                                        <td style="width:200px; font-weight:bold;">Número da conta: </td>
+                                        <td>@conta.idConta.ToString()</td>
+                                    </tr>
+                                    <tr class="whiteSmoke">
+                                        <td style="width:200px; font-weight:bold;">Saldo disponível em reais: </td>
+                                        <td>@conta.TotalDisponivel().ToString("C2")</td>
+                                    </tr>
+                                    <tr class="white">
+                                        <td style="width:200px; font-weight:bold;">Saldo disponível em dólares: </td>
+
+                                        <td>
+                                            @{
+                                                try
+                                                {
+                                                    <span>@conta.TotalDisponivel().DolarComercial().ToString("C2", System.Globalization.CultureInfo.CreateSpecificCulture("en-US"))</span>
+                                                }
+                                                catch (Exception ex)
+                                                {
+                                                    <span>---</span>
+                                                }
+                                            }
+                                        </td>                                        
+                                    </tr>
+                                    <tr class="whiteSmoke">
+                                        <td style="width:200px; font-weight:bold;">&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td width="50%" valign="top">
+                                <table class="table">
+                                    <tr class="white">
+                                        <td style="width:200px; font-weight:bold;">Data do extrato bancário: </td>
+                                        <td>@DateTime.Now.ToString("dd/MM/yyyy")</td>
+                                    </tr>
+                                    <tr class="whiteSmoke">
+                                        <td style="width:200px; font-weight:bold;">Cotação do dólar comercial: </td>
+                                        <td>
+                                            @{
+                                                try
+                                                {
+                                                    <span>@string.Format("{0}", conta.CotacaoDolarComercial().ToString("C2", System.Globalization.CultureInfo.CreateSpecificCulture("en-US")))</span>
+                                                }
+                                                catch (Exception ex)
+                                                {
+                                                    <span>---</span>
+                                                }
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr class="white">
+                                        <td style="width:200px; font-weight:bold;">&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+                                    <tr class="whiteSmoke">
+                                        <td style="width:200px; font-weight:bold;">&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr style="background:#2c3e50 !important; color:white; font-weight:bold; text-align:left;">
+                <th style="width:20px;">&nbsp;</th>
+                <th style="width:150px;">Data</th>
+                <th style="min-width:300px;">Descrição</th>
+                <th style="width:150px;">Recebimentos</th>
+                <th style="width:150px;">Despesas</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (conta.Movimentos().Count() > 0)
+            {
+                foreach (ContaCorrente.Models.Movimento movimento in conta.Movimentos())
+                {
+                    <tr style="text-align:left;" class="@string.Format("{0}", line++ % 2 == 0 ? "white" : "whiteSmoke")">
+                        <td style="color:#ccc;">
+                            @line
+                        </td>
+
+                        <td>@string.Format("{0}", movimento.dataMovimento.ToString("dd/MM/yyyy"))</td>
+                        <td>@movimento.Descricao</td>
+
+                        <td class="nb">@string.Format("{0}", movimento.Credito ? movimento.valor.ToString("C2") : "---")</td>
+                        <td class="nb red">@string.Format("{0}", movimento.Credito ? "---" : movimento.valor.ToString("C2"))</td>
+                    </tr>
+                }
+
+                <tr style="text-align:left; font-weight:bold; background-color:#e2e2e2;">
+                    <td colspan="3" class="borda"></td>
+
+                    <td class="nb borda">@string.Format("{0}", conta.Creditos().Select(s => s.valor).Sum().ToString("C2"))</td>
+                    <td class="nb red borda">@string.Format("{0}", conta.Debitos().Select(s => s.valor).Sum().ToString("C2"))<br /></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="modal text-center" role="dialog" tabindex="-1" id="lancamento-modal">
+    <div class="modal-dialog modal-lg" role="document" style="margin:8% auto">
+        <div class="modal-content">
+            <div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+            <div class="modal-body">
+                <div class="container text-center">
+                    <div class="row">
+                        <div class="col-lg-8 mx-auto">
+                            <h2 class="text-uppercase text-secondary mb-0">Novo lançamento</h2><br />
+                            <div>
+                                @using (Html.BeginForm(null, null, FormMethod.Post, new { name = "lancamentoForm", id = "lancamentoForm" }))
+                                {
+                                    <input type="hidden" name="IDConta" value='@ViewBag.IDConta' />
+
+                                    <table class="table" style="margin:0px; color:#555; text-align:left; font-size:@string.Format("{0}px", Request.Browser.IsMobileDevice ? 11.ToString() : 14.ToString())">
+                                        <tbody>
+                                            <tr>
+                                                <td style="border-top:none; width:240px; vertical-align:middle;">Tipo de lançamento: </td>
+                                                <td style="border-top:none; width:310px;">
+                                                    @Html.DropDownList("TiposLancamento", "Selecione o lançamento que deseja realizar")
+                                                    <label id="hTiposLancamento" style="color:#FF0000; font-size:10px; display:none;">Selecione o tipo de lançamento!</label>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="border-top:none; width:240px; vertical-align:middle;">Data do lançamento: </td>
+                                                <td style="border-top:none; width:310px;" id="sandbox-container">
+                                                    <div class="input-date input-group" id="datepicker" style="width:300px; height:28px; margin-top:-3px;">
+                                                        @Html.TextBox("data", DateTime.Now.ToString("dd/MM/yyyy"), new { @class = "input-sm form-control datepicker" })
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="border-top:none; width:240px; vertical-align:middle;">Descrição: </td>
+                                                <td style="border-top:none; width:310px;">
+                                                    @Html.TextBox("descricao", string.Empty, new { @minlength = "3", @class = "form-control", @placeholder = "Descrição" })
+                                                    <label id="hdescricao" style="color:#FF0000; font-size:10px; display:none;">É necessário informar a descrição do lançamento!</label>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="border-top:none; width:240px; vertical-align:middle;">Valor do lançamento: </td>
+                                                <td style="border-top:none; width:310px;">
+                                                    @Html.TextBox("valorlancamento", "0.01", new { type = "number", min = "0.01", step = "0.05", @class = "form-control", placeholder = "Valor", onkeypress = "return validar(this, event);" })
+                                                    <label id="hvalorlancamento" style="color:#FF0000; font-size:10px; display:none;">É necessário informar o valor do lançamento!</label>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer pb-5"><a class="btn btn-primary btn-lg mx-auto rounded-pill portfolio-modal-dismiss" id="submit" role="button" href="#"><i class="fa fa-check"></i>&nbsp;&nbsp;Registrar</a></div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $('#sandbox-container .datepicker').datepicker({
+        format: "dd/mm/yyyy",
+        todayBtn: "linked",
+        clearBtn: true,
+        language: "pt-BR",
+        autoclose: true,
+        todayHighlight: true
+    });
+</script>

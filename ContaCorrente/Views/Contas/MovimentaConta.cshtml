@@ -1,0 +1,180 @@
+﻿@using ContaCorrente.Extensions;
+
+@{
+    ViewBag.Title = "Mr. Bank - Contas bancárias";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var contas = new ContaCorrente.Business.ContaDao().Listar();
+    int line = 0;
+}
+
+<link rel="stylesheet" href="~/Content/css/formularios.css?v=@DateTime.Now.ToString("ddMMyyyyHHmmss")">
+
+<script type="text/javascript">
+    function validarConta(obj, e)
+    {
+        return (e.keyCode > 47 && e.keyCode < 58)
+    }
+
+    $(document).ready(function () {
+        $('.abrelancamento').click(function () {
+            $('#lancamento-modal-conta').show();
+        });
+
+        $('#submitConta').click(function () {
+            if ($('#numeroconta').val().length == 0 || $('#numeroconta').val() <= 0) {
+                $('#hnumeroconta').show();
+                return;
+            }
+            else
+                $('#hnumeroconta').hide();
+
+            if ($('#correentista').val().length <= 3) {
+                $('#hcorreentista').show();
+                return;
+            }
+            else
+                $('#hcorreentista').hide();
+
+            if ($('#saldoinicial').val().length == 0) {
+                $('#hsaldoinicial').show();
+                return;
+            }
+            else
+                $('#hsaldoinicial').hide();
+
+            $('#cadastroForm').submit();
+        });
+
+        $('.close').click(function () {
+            $('#lancamento-modal-conta').hide();
+        });
+    });
+</script>
+
+<div class="table-responsive" style="font-size:13px;">
+    <div style="width:100%; text-align:left; position:relative; margin-bottom:40px;">
+        <div style="float:right; display:inline-block; text-align:right; cursor:pointer;" class="abrelancamento">nova conta</div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr style="background:#2c3e50 !important; color:white; font-weight:bold; text-align:left;">
+                <th style="width:20px;">&nbsp;</th>
+                <th style="width:150px;">Data de cadastro</th>
+                <th style="min-width:300px;">Correntista</th>
+                <th style="width:130px;">Número da conta</th>
+                <th style="width:130px;">Saldo em reais</th>
+                <th style="width:130px;">Saldo em dólar</th>
+                <th style="width:130px;">&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (contas.Count() > 0)
+            {
+                foreach (ContaCorrente.Models.Conta conta in contas)
+                {
+                    <tr style="text-align:left;" class="@string.Format("{0}", line++ % 2 == 0 ? "white" : "whiteSmoke")">
+                        <td style="color:#ccc;">@line</td>
+                        
+                        <td style="width:150px;">@string.Format("{0}", conta.DataCadastro.ToString("dd/MM/yyyy"))</td>
+                        <td style="min-width:300px;">@conta.Nome</td>
+                        <td style="width:130px;">@conta.idConta</td>
+
+                        <td style="width:130px;">
+                            @string.Format("{0}", conta.TotalDisponivel().ToString("C2"))
+                        </td>
+                        
+                        <td style="width:130px;">
+                        @{
+                            try
+                            {
+                                <span>@conta.TotalDisponivel().DolarComercial().ToString("C2", System.Globalization.CultureInfo.CreateSpecificCulture("en-US")))</span>
+                            }
+                            catch (Exception ex)
+                            {
+                                <span>---</span>
+                            }
+                        }
+                        </td>
+
+                        <td style="width:130px;">
+                            @if (conta.idConta != Session["idConta"].ToString().ToLong())
+                            {
+                                @Html.ActionLink("trocar", "VisualizaExtrato", new { IDConta = conta.idConta }, new { @class = "red" })
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="modal text-center" role="dialog" tabindex="-1" id="lancamento-modal-conta">
+    <div class="modal-dialog modal-lg" role="document" style="margin:8% auto">
+        <div class="modal-content">
+            <div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+            <div class="modal-body">
+                <div class="container text-center">
+                    <div class="row">
+                        <div class="col-lg-8 mx-auto">
+                            <h2 class="text-uppercase text-secondary mb-0">Nova conta</h2><br />
+                            <div>
+                                @using (Html.BeginForm(null, null, FormMethod.Post, new { name = "cadastroForm", id = "cadastroForm" }))
+                                {
+                                    <table class="table" style="margin:0px; color:#555; text-align:left; font-size:@string.Format("{0}px", Request.Browser.IsMobileDevice ? 11.ToString() : 14.ToString())">
+                                        <tbody>
+                                            <tr>
+                                                <td style="border-top:none; width:240px; vertical-align:middle;">Número da conta: </td>
+                                                <td style="border-top:none; width:310px;">
+                                                    @Html.TextBox("numeroconta", string.Empty, new { type = "number", min = "1", @class = "form-control", placeholder = "Número da conta", onkeypress = "return validarConta(this, event);" })
+                                                    <label id="hnumeroconta" style="color:#FF0000; font-size:10px; display:none;">Informe o número da conta!</label>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="border-top:none; width:240px; vertical-align:middle;">Data de cadastro: </td>
+                                                <td style="border-top:none; width:310px;" id="sandbox-container">
+                                                    <div class="input-date input-group" id="datepicker" style="width:300px; height:28px; margin-top:-3px;">
+                                                        @Html.TextBox("data", DateTime.Now.ToString("dd/MM/yyyy"), new { @class = "input-sm form-control datepicker" })
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="border-top:none; width:240px; vertical-align:middle;">Correntista: </td>
+                                                <td style="border-top:none; width:310px;">
+                                                    @Html.TextBox("correentista", string.Empty, new { @minlength = "3", @class = "form-control", @placeholder = "Correntista" })
+                                                    <label id="hcorreentista" style="color:#FF0000; font-size:10px; display:none;">É necessário informar o nome do correntista!</label>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="border-top:none; width:240px; vertical-align:middle;">Valor do lançamento: </td>
+                                                <td style="border-top:none; width:310px;">
+                                                    @Html.TextBox("saldoinicial", "0.01", new { type = "number", min = "0.00", step = "0.05", @class = "form-control", placeholder = "Saldo inicial", onkeypress = "return validar(this, event);" })
+                                                    <label id="hsaldoinicial" style="color:#FF0000; font-size:10px; display:none;">É necessário informar o saldo inicial da conta!</label>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer pb-5"><a class="btn btn-primary btn-lg mx-auto rounded-pill portfolio-modal-dismiss" id="submitConta" role="button" href="#"><i class="fa fa-check"></i>&nbsp;&nbsp;Registrar</a></div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $('#sandbox-container .datepicker').datepicker({
+        format: "dd/mm/yyyy",
+        todayBtn: "linked",
+        clearBtn: true,
+        language: "pt-BR",
+        autoclose: true,
+        todayHighlight: true
+    });
+</script>
