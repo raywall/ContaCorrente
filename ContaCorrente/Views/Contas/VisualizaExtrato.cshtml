@@ -50,7 +50,7 @@
                                                 {
                                                     <span>@conta.TotalDisponivel().DolarComercial().ToString("C2", System.Globalization.CultureInfo.CreateSpecificCulture("en-US"))</span>
                                                 }
-                                                catch (Exception ex)
+                                                catch
                                                 {
                                                     <span>---</span>
                                                 }
@@ -77,7 +77,7 @@
                                                 {
                                                     <span>@string.Format("{0}", conta.CotacaoDolarComercial().ToString("C2", System.Globalization.CultureInfo.CreateSpecificCulture("en-US")))</span>
                                                 }
-                                                catch (Exception ex)
+                                                catch
                                                 {
                                                     <span>---</span>
                                                 }
@@ -114,7 +114,7 @@
         <tbody>
             @if (conta.Movimentos().Count() > 0)
             {
-                foreach (ContaCorrente.Models.Movimento movimento in conta.Movimentos())
+                foreach (ContaCorrente.Models.Movimento movimento in conta.Movimentos().OrderByDescending(o => o.dataMovimento).ToList())
                 {
                     <tr style="text-align:left;" class="@string.Format("{0}", line++ % 2 == 0 ? "white" : "whiteSmoke")">
                         <td style="color:#ccc;">
