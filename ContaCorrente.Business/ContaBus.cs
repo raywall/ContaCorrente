@@ -26,11 +26,11 @@ namespace ContaCorrente.Business
         {
             try
             {
-                if (conta == null || conta.idConta == 0)
+                if (conta == null || conta.IDConta == 0)
                     throw new Exception("Você deve especificar a conta a ser cadastrada!");
 
-                if (Listar().Where(w => w.idConta == conta.idConta).ToList().Count() > 0)
-                    throw new Exception(string.Format("A conta {0} já existe em nosso sistema!", conta.idConta));
+                if (Listar().Where(w => w.IDConta == conta.IDConta).ToList().Count() > 0)
+                    throw new Exception(string.Format("A conta {0} já existe em nosso sistema!", conta.IDConta));
 
                 return contaDao.Inserir(conta);
             }

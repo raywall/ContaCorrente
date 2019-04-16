@@ -28,10 +28,10 @@ namespace ContaCorrente.Business
                 if (movimento == null)
                     throw new Exception("Você deve especificar os dados de movimentação a serem registrados!");
 
-                else if (movimento.idConta == 0)
+                else if (movimento.IDConta == 0)
                     throw new Exception("O número da conta não pode ser igual a zero!");
 
-                else if (movimento.valor == 0 & Creditos(movimento.idConta).Count > 0)
+                else if (movimento.Valor == 0 & Creditos(movimento.IDConta).Count > 0)
                     throw new Exception("Você deve informar o valor do lançamento!");
 
                 return movimentoDao.Movimenta(movimento);

@@ -18,7 +18,7 @@ namespace ContaCorrente.DataAccess
             try
             {
                 return (sqlConn.Execute(@"INSERT INTO [dbo].[Movimentos] (IDConta, DataMovimento, Descricao, Valor, Credito) VALUES (@IDConta, @DataMovimento, @Descricao, @Valor, @Credito)",
-                    new { IDConta = movimento.idConta, DataMovimento = movimento.dataMovimento, Descricao = movimento.Descricao, Valor = movimento.valor, Credito = movimento.Credito }) == 1);
+                    new { IDConta = movimento.IDConta, DataMovimento = movimento.DataMovimento, Descricao = movimento.Descricao, Valor = movimento.Valor, Credito = movimento.Credito }) == 1);
             }
             catch (Exception ex)
             {

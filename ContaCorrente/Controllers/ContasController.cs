@@ -32,7 +32,7 @@ namespace ContaCorrente.Controllers
                 {
                     conta = new Models.Conta()
                     {
-                        idConta = form["numeroconta"].ToString().ToLong(),
+                        IDConta = form["numeroconta"].ToString().ToLong(),
                         DataCadastro = data,
                         Nome = form["correentista"]
                     };
@@ -44,11 +44,11 @@ namespace ContaCorrente.Controllers
                     {
                         new Business.MovimentoBus().Movimenta(new Models.Movimento()
                         {
-                            idConta = conta.idConta,
-                            dataMovimento = data,
+                            IDConta = conta.IDConta,
+                            DataMovimento = data,
                             Descricao = "Saldo inicial",
                             Credito = true,
-                            valor = form["saldoinicial"].ToString().ToDecimal()
+                            Valor = form["saldoinicial"].ToString().ToDecimal()
                         });
 
                         ViewBag.Mensagem = "Nova conta cadastrada!";
@@ -117,10 +117,10 @@ namespace ContaCorrente.Controllers
                 if (data != DateTime.MinValue)
                     movimento = new Models.Movimento()
                     {
-                        idConta = form["IDConta"].ToString().ToLong(),
-                        dataMovimento = data,
+                        IDConta = form["IDConta"].ToString().ToLong(),
+                        DataMovimento = data,
                         Descricao = form["descricao"],
-                        valor = form["valorlancamento"].ToString().ToDecimal(),
+                        Valor = form["valorlancamento"].ToString().ToDecimal(),
                         Credito = (tipo == Models.Movimento.TipoMovimento.Credito)
                     };
 

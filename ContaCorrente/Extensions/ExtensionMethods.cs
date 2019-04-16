@@ -102,7 +102,7 @@ namespace ContaCorrente.Extensions
         {
             try
             {
-                return conta.Creditos().Select(s => s.valor).Sum() - conta.Debitos().Select(s => s.valor).Sum();
+                return conta.Creditos().Select(s => s.Valor).Sum() - conta.Debitos().Select(s => s.Valor).Sum();
             }
             catch { }
 
@@ -167,7 +167,7 @@ namespace ContaCorrente.Extensions
         /// <returns></returns>
         public static List<Models.Movimento> Creditos(this Models.Conta conta)
         {
-            return new Business.MovimentoBus().Creditos(conta.idConta).OrderBy(o => o.dataMovimento).ToList();
+            return new Business.MovimentoBus().Creditos(conta.IDConta).OrderBy(o => o.DataMovimento).ToList();
         }
 
         /// <summary>
@@ -176,7 +176,7 @@ namespace ContaCorrente.Extensions
         /// <returns></returns>
         public static List<Models.Movimento> Debitos(this Models.Conta conta)
         {
-            return new Business.MovimentoBus().Debitos(conta.idConta).OrderBy(o => o.dataMovimento).ToList();
+            return new Business.MovimentoBus().Debitos(conta.IDConta).OrderBy(o => o.DataMovimento).ToList();
         }
 
         /// <summary>
@@ -185,7 +185,7 @@ namespace ContaCorrente.Extensions
         /// <returns></returns>
         public static List<Models.Movimento> Movimentos(this Models.Conta conta)
         {
-            return new Business.MovimentoBus().Movimentos(conta.idConta).OrderBy(o => o.dataMovimento).ToList();
+            return new Business.MovimentoBus().Movimentos(conta.IDConta).OrderBy(o => o.DataMovimento).ToList();
         }
         #endregion
     }

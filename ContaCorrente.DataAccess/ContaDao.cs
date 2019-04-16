@@ -17,7 +17,7 @@ namespace ContaCorrente.DataAccess
         {
             try
             {
-                return (sqlConn.Execute(@"INSERT INTO [dbo].[Contas] (IDConta, Nome) VALUES (@IDConta, @Nome)", new { IDConta = conta.idConta, Nome = conta.Nome }) == 1);
+                return (sqlConn.Execute(@"INSERT INTO [dbo].[Contas] (IDConta, Nome) VALUES (@IDConta, @Nome)", new { IDConta = conta.IDConta, Nome = conta.Nome }) == 1);
             }
             catch (Exception ex)
             {
@@ -51,12 +51,12 @@ namespace ContaCorrente.DataAccess
         {
             try
             {
-                var creditos = new MovimentoDao().Creditos(conta.idConta);
-                var debitos = new MovimentoDao().Debitos(conta.idConta);
+                var creditos = new MovimentoDao().Creditos(conta.IDConta);
+                var debitos = new MovimentoDao().Debitos(conta.IDConta);
 
-                if (sqlConn.Execute("DELETE [dbo].[Movimentos] WHERE IDConta = @IDConta", new { IDConta = conta.idConta }) == 1)
+                if (sqlConn.Execute("DELETE [dbo].[Movimentos] WHERE IDConta = @IDConta", new { IDConta = conta.IDConta }) == 1)
                 {
-                    if (sqlConn.Execute(@"DELETE [dbo].[Contas] WHERE IDConta = @IDConta", new { IDConta = conta.idConta }) == 1)
+                    if (sqlConn.Execute(@"DELETE [dbo].[Contas] WHERE IDConta = @IDConta", new { IDConta = conta.IDConta }) == 1)
                         return true;
                     else
                     {

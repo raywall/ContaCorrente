@@ -19,7 +19,7 @@ namespace ContaCorrente.Models
         /// ID da conta do correntista
         /// </summary>
         [Required(ErrorMessage = "O número da conta precisa ser informado.")]
-        public long idConta { get; set; }
+        public long IDConta { get; set; }
 
         /// <summary>
         /// Data do cadastro
@@ -31,17 +31,6 @@ namespace ContaCorrente.Models
         /// </summary>
         [Required(ErrorMessage = "Informe o nome do correntista.")]
         public string Nome { get; set; }
-        #endregion
-
-        #region Public methods
-        /// <summary>
-        /// Informa o saldo da conta baseado em sua movimentação
-        /// </summary>
-        /// <returns></returns>
-        public decimal Saldo()
-        {
-            return 0;
-        }
         #endregion
     }
 }

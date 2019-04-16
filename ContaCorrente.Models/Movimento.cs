@@ -34,7 +34,7 @@ namespace ContaCorrente.Models
         /// ID da conta
         /// </summary>
         [Required(ErrorMessage = "Para inserir uma movimentação é necessário informar o número da conta a qual pertence.")]
-        public long idConta { get; set; }
+        public long IDConta { get; set; }
 
         /// <summary>
         /// Descrição da transação
@@ -45,13 +45,13 @@ namespace ContaCorrente.Models
         /// <summary>
         /// Data de movimentação do valor
         /// </summary>
-        public DateTime dataMovimento { get; set; }
+        public DateTime DataMovimento { get; set; }
 
         /// <summary>
         /// Valor movimentado
         /// </summary>
         [Required(ErrorMessage = "Informe o valor do movimento a ser realizado.")]
-        public decimal valor { get; set; }
+        public decimal Valor { get; set; }
 
         /// <summary>
         /// Tipo de movimento
