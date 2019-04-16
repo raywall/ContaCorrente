@@ -17,7 +17,7 @@
     <table id="table-title" class="table">
         <tr>
             <td style="text-align:left; width:50%; font-size: 22px !important;">
-                <div class="div-left">@string.Format("{0} - CC: {1}", conta.Nome, conta.idConta.ToString())</div>
+                <div class="div-left">@string.Format("{0} - CC: {1}", conta.Nome, conta.IDConta.ToString())</div>
             </td>
             <td style="text-align:right; width:50%; vertical-align:middle; cursor:pointer;">
                 <div class="abrelancamento div-right">novo lançamento</div>
@@ -35,7 +35,7 @@
                                 <table class="table">
                                     <tr class="white">
                                         <td style="width:200px; font-weight:bold;">Número da conta: </td>
-                                        <td>@conta.idConta.ToString()</td>
+                                        <td>@conta.IDConta.ToString()</td>
                                     </tr>
                                     <tr class="whiteSmoke">
                                         <td style="width:200px; font-weight:bold;">Saldo disponível em reais: </td>
@@ -114,26 +114,26 @@
         <tbody>
             @if (conta.Movimentos().Count() > 0)
             {
-                foreach (ContaCorrente.Models.Movimento movimento in conta.Movimentos().OrderByDescending(o => o.dataMovimento).ToList())
+                foreach (ContaCorrente.Models.Movimento movimento in conta.Movimentos().OrderByDescending(o => o.DataMovimento).ToList())
                 {
                     <tr style="text-align:left;" class="@string.Format("{0}", line++ % 2 == 0 ? "white" : "whiteSmoke")">
                         <td style="color:#ccc;">
                             @line
                         </td>
 
-                        <td>@string.Format("{0}", movimento.dataMovimento.ToString("dd/MM/yyyy"))</td>
+                        <td>@string.Format("{0}", movimento.DataMovimento.ToString("dd/MM/yyyy"))</td>
                         <td>@movimento.Descricao</td>
 
-                        <td class="nb">@string.Format("{0}", movimento.Credito ? movimento.valor.ToString("C2") : "---")</td>
-                        <td class="nb red">@string.Format("{0}", movimento.Credito ? "---" : movimento.valor.ToString("C2"))</td>
+                        <td class="nb">@string.Format("{0}", movimento.Credito ? movimento.Valor.ToString("C2") : "---")</td>
+                        <td class="nb red">@string.Format("{0}", movimento.Credito ? "---" : movimento.Valor.ToString("C2"))</td>
                     </tr>
                 }
 
                 <tr style="text-align:left; font-weight:bold; background-color:#e2e2e2;">
                     <td colspan="3" class="borda"></td>
 
-                    <td class="nb borda">@string.Format("{0}", conta.Creditos().Select(s => s.valor).Sum().ToString("C2"))</td>
-                    <td class="nb red borda">@string.Format("{0}", conta.Debitos().Select(s => s.valor).Sum().ToString("C2"))<br /></td>
+                    <td class="nb borda">@string.Format("{0}", conta.Creditos().Select(s => s.Valor).Sum().ToString("C2"))</td>
+                    <td class="nb red borda">@string.Format("{0}", conta.Debitos().Select(s => s.Valor).Sum().ToString("C2"))<br /></td>
                 </tr>
             }
         </tbody>

@@ -79,7 +79,7 @@
                         
                         <td style="width:150px;">@string.Format("{0}", conta.DataCadastro.ToString("dd/MM/yyyy"))</td>
                         <td style="min-width:300px;">@conta.Nome</td>
-                        <td style="width:130px;">@conta.idConta</td>
+                        <td style="width:130px;">@conta.IDConta</td>
 
                         <td style="width:130px;">
                             @string.Format("{0}", conta.TotalDisponivel().ToString("C2"))
@@ -99,9 +99,9 @@
                         </td>
 
                         <td style="width:130px;">
-                            @if (conta.idConta != Session["idConta"].ToString().ToLong())
+                            @if (conta.IDConta != Session["idConta"].ToString().ToLong())
                             {
-                                @Html.ActionLink("trocar", "VisualizaExtrato", new { IDConta = conta.idConta }, new { @class = "red" })
+                                @Html.ActionLink("trocar", "VisualizaExtrato", new { IDConta = conta.IDConta }, new { @class = "red" })
                             }
                         </td>
                     </tr>

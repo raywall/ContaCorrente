@@ -1,4 +1,5 @@
-﻿using System.Data.SqlClient;
+﻿using System.Configuration;
+using System.Data.SqlClient;
 
 namespace ContaCorrente.DataAccess
 {
@@ -8,7 +9,8 @@ namespace ContaCorrente.DataAccess
 
         public Connection()
         {
-            sqlConn = new SqlConnection("Data Source=db.mic-br.com;Initial Catalog=teste;Persist Security Info=True;User ID=cognizant;Password=cognizant;");
+            if (sqlConn == null)
+                sqlConn = new SqlConnection(ConfigurationManager.ConnectionStrings["MSSQL_DB"].ConnectionString);
         }
     }
 }
