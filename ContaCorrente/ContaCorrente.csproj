@@ -288,11 +288,11 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ContaCorrente.Business\ContaCorrente.Business.csproj">
+    <ProjectReference Include="..\ContaCorrente.Business\ContaCorrente.Business.csproj">
       <Project>{f48369b4-ca49-4179-908b-52da8334ee9e}</Project>
       <Name>ContaCorrente.Business</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\ContaCorrente.Models\ContaCorrente.Models.csproj">
+    <ProjectReference Include="..\ContaCorrente.Models\ContaCorrente.Models.csproj">
       <Project>{b4020831-623f-4540-b80a-a41d2d9d5d4d}</Project>
       <Name>ContaCorrente.Models</Name>
     </ProjectReference>
