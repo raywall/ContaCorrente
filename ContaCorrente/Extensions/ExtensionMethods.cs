@@ -163,6 +163,33 @@ namespace ContaCorrente.Extensions
 
             return resultado;
         }
+
+        /// <summary>
+        /// Creditos da conta no banco
+        /// </summary>
+        /// <returns></returns>
+        public static List<Models.Movimento> Creditos(this Models.Conta conta)
+        {
+            return new Business.MovimentoBus().Creditos(conta.idConta).OrderBy(o => o.dataMovimento).ToList();
+        }
+
+        /// <summary>
+        /// Debitos da conta no banco
+        /// </summary>
+        /// <returns></returns>
+        public static List<Models.Movimento> Debitos(this Models.Conta conta)
+        {
+            return new Business.MovimentoBus().Debitos(conta.idConta).OrderBy(o => o.dataMovimento).ToList();
+        }
+
+        /// <summary>
+        /// Retorna todos os movimentos da conta no banco
+        /// </summary>
+        /// <returns></returns>
+        public static List<Models.Movimento> Movimentos(this Models.Conta conta)
+        {
+            return new Business.MovimentoBus().Movimentos(conta.idConta).OrderBy(o => o.dataMovimento).ToList();
+        }
         #endregion
     }
 }

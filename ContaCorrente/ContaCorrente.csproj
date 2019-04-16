@@ -45,9 +45,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Dapper, Version=1.50.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Dapper.1.50.2\lib\net45\Dapper.dll</HintPath>
-    </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.11.2.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <HintPath>..\packages\HtmlAgilityPack.1.11.2\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
@@ -126,22 +123,12 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Business\ContaBus.cs" />
-    <Compile Include="Business\MovimentoBus.cs" />
-    <Compile Include="Business\UsuarioBus.cs" />
-    <Compile Include="DAO\ContaDao.cs" />
-    <Compile Include="DAO\MovimentoDao.cs" />
-    <Compile Include="DAO\UsuarioDao.cs" />
     <Compile Include="Controllers\ContasController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
-    <Compile Include="App_Data\Connection.cs" />
     <Compile Include="Extensions\ExtensionMethods.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Conta.cs" />
-    <Compile Include="Models\Movimento.cs" />
-    <Compile Include="Models\Usuario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -166,6 +153,7 @@
     <Content Include="Content\css\bootstrap-datepicker3.standalone.min.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\css\extrato.css" />
     <Content Include="Content\css\fonts\Aclonica.css" />
     <Content Include="Content\css\fonts\Aldrich.css" />
     <Content Include="Content\css\fonts\Lato.css" />
@@ -191,26 +179,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\img\financial-background.jpg" />
-    <Content Include="Content\img\portfolio\cabin.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\img\portfolio\cake.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\img\portfolio\circus.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\img\portfolio\game.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\img\portfolio\safe.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\img\portfolio\submarine.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Content\js\bootstrap-datepicker.min.js" />
     <Content Include="Content\js\bootstrap-datepicker.pt-BR.min.js" />
+    <Content Include="Content\js\extrato.js" />
     <Content Include="Content\js\jquery.min.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -280,7 +251,9 @@
     <Content Include="Views\Contas\MovimentaConta.cshtml" />
     <Content Include="Views\Contas\VisualizaExtrato.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -313,6 +286,16 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\ContaCorrente.Business\ContaCorrente.Business.csproj">
+      <Project>{f48369b4-ca49-4179-908b-52da8334ee9e}</Project>
+      <Name>ContaCorrente.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ContaCorrente.Models\ContaCorrente.Models.csproj">
+      <Project>{b4020831-623f-4540-b80a-a41d2d9d5d4d}</Project>
+      <Name>ContaCorrente.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

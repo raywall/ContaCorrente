@@ -4,61 +4,28 @@
     ViewBag.Title = "Mr. Bank - Extrato bancário";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    var conta = new ContaCorrente.Business.ContaDao().Carregar((long)ViewBag.IDConta);
+    var conta = new ContaCorrente.Business.ContaBus().Carregar((long)ViewBag.IDConta);
     int line = 0;
 }
 
-<link rel="stylesheet" href="~/Content/css/formularios.css?v=@DateTime.Now.ToString("ddMMyyyyHHmmss")">
+<link rel="stylesheet" href="~/Content/css/formularios.css?v=@DateTime.Now.ToString("ddMMyyyyHHmmss")" />
+<link rel="stylesheet" href="~/Content/css/extrato.css?v=@DateTime.Now.ToString("ddMMyyyyHHmmss")" />
 
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('.abrelancamento').click(function () {
-            $('#lancamento-modal').show();
-        });
+<script src="~/Content/js/extrato.js"></script>
 
-        $('#submit').click(function () {
-            if ($('#TiposLancamento').children("option:selected").val() != 1 && $('#TiposLancamento').children("option:selected").val() != 2) {
-                $('#hTiposLancamento').show();
-                return;
-            }
-            else
-                $('#hTiposLancamento').hide();
-
-            if ($('#descricao').val().length <= 3) {
-                $('#hdescricao').show();
-                return;
-            }
-            else
-                $('#hdescricao').hide();
-
-
-            if ($('#valorlancamento').val().length == 0 || $('#valorlancamento').val() <= 0) {
-                $('#hvalorlancamento').show();
-                return;
-            }
-            else
-                $('#hvalorlancamento').hide();
-
-            $('#lancamentoForm').submit();
-        });
-
-        $('.close').click(function () {
-            $('#lancamento-modal').hide();
-        });
-    });
-</script>
-
-<div class="table-responsive" style="font-size:13px;">
-    <table class="table">
+<div id="table-extrato" class="table-responsive">
+    <table id="table-title" class="table">
         <tr>
-            <td style="width:100%; text-align:left; position:relative; margin-bottom:40px; vertical-align:bottom; color:#FFF; border-top:none; position:relative;">
-                <div style="position:absolute; top:0; left:0; display:inline-block; text-align:left; font-size:22px;">@string.Format("{0} - CC: {1}", conta.Nome, conta.idConta.ToString())</div>
-                <div style="position:absolute; top:0; right:0; display:inline-block; text-align:right; cursor:pointer; padding:8px 0;" class="abrelancamento">novo lançamento</div>
+            <td style="text-align:left; width:50%; font-size: 22px !important;">
+                <div class="div-left">@string.Format("{0} - CC: {1}", conta.Nome, conta.idConta.ToString())</div>
+            </td>
+            <td style="text-align:right; width:50%; vertical-align:middle; cursor:pointer;">
+                <div class="abrelancamento div-right">novo lançamento</div>
             </td>
         </tr>
     </table>
 
-    <div style="display:block; margin:15px 0px 35px 0px; padding:10px; border-left:1px solid #e7e7e7; border-right: 1px solid #e7e7e7; border-bottom:1px solid #e7e7e7; background:#fafafa;">
+    <div id="conteudo">
         <table class="table noBorder" style="text-align:left; margin-top:10px;">
             <tr>
                 <td>
@@ -171,7 +138,7 @@
             }
         </tbody>
     </table>
-</div>
+</divid="table-extrato">
 
 <div class="modal text-center" role="dialog" tabindex="-1" id="lancamento-modal">
     <div class="modal-dialog modal-lg" role="document" style="margin:8% auto">

@@ -4,7 +4,7 @@
     ViewBag.Title = "Mr. Bank - Contas bancárias";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    var contas = new ContaCorrente.Business.ContaDao().Listar();
+    var contas = new ContaCorrente.Business.ContaBus().Listar();
     int line = 0;
 }
 
@@ -89,7 +89,7 @@
                         @{
                             try
                             {
-                                <span>@conta.TotalDisponivel().DolarComercial().ToString("C2", System.Globalization.CultureInfo.CreateSpecificCulture("en-US")))</span>
+                                <span>@conta.TotalDisponivel().DolarComercial().ToString("C2", System.Globalization.CultureInfo.CreateSpecificCulture("en-US"))</span>
                             }
                             catch (Exception ex)
                             {

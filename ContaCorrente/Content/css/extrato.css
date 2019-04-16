@@ -1,0 +1,43 @@
+﻿#table-extrato {
+    font-size: 13px;
+}
+
+#table-title td {
+    width: 100%;
+    text-align: left;
+    position: relative;
+    margin-bottom: 40px;
+    vertical-align: bottom;
+    color: #FFF;
+    border-top: none;
+    position: relative;
+}
+
+#table-title tr td div .div-left {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: inline-block;
+    text-align: left;
+    font-size: 22px !important;
+}
+
+#table-title tr td div .div-right {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: inline-block;
+    text-align: right;
+    cursor: pointer;
+    padding: 8px 0;
+}
+
+#conteudo {
+    display: block;
+    margin: 15px 0px 35px 0px;
+    padding: 10px;
+    border-left: 1px solid #e7e7e7;
+    border-right: 1px solid #e7e7e7;
+    border-bottom: 1px solid #e7e7e7;
+    background: #fafafa;
+}

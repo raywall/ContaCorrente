@@ -20,7 +20,7 @@ namespace ContaCorrente.Controllers
         {
             try
             {
-                var usuario = new Business.UsuarioDao().Carregar(form["usuario"]);
+                var usuario = new Business.UsuarioBus().Carregar(form["usuario"]);
 
                 if (usuario != null && (usuario.Ativo & usuario.Password.Equals(form["senha"])))
                 {

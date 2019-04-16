@@ -40,9 +40,9 @@ namespace ContaCorrente.Controllers
 
                 if (conta != null)
                 {
-                    if (new Business.ContaDao().Inserir(conta))
+                    if (new Business.ContaBus().Inserir(conta))
                     {
-                        new Business.MovimentoDao().Movimenta(new Models.Movimento()
+                        new Business.MovimentoBus().Movimenta(new Models.Movimento()
                         {
                             idConta = conta.idConta,
                             dataMovimento = data,
@@ -126,7 +126,7 @@ namespace ContaCorrente.Controllers
 
                 if (movimento != null)
                 {
-                    if (new Business.MovimentoDao().Movimenta(movimento))
+                    if (new Business.MovimentoBus().Movimenta(movimento))
                         ViewBag.Mensagem = "Novo movimento inserido na conta!";
                     else
                         ViewBag.Mensagem = "Ocorreu um erro durante o lançamento do movimento na conta!";
