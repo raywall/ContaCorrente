@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Dapper;
+using System.Data.SqlClient;
 
 namespace ContaCorrente.DataAccess
 {
@@ -17,11 +16,18 @@ namespace ContaCorrente.DataAccess
         {
             try
             {
-                return (sqlConn.Execute(@"INSERT INTO [dbo].[Contas] (IDConta, Nome) VALUES (@IDConta, @Nome)", new { IDConta = conta.IDConta, Nome = conta.Nome }) == 1);
+                sqlConn.Open();
+                using (var sqlCommand = new SqlCommand(string.Format(@"INSERT INTO[dbo].[Contas](IDConta, Nome) VALUES({0}, {1})", conta.IDConta, conta.Nome)))
+                    return (sqlCommand.ExecuteNonQuery() == 1);
             }
             catch (Exception ex)
             {
                 throw ex;
+            }
+            finally
+            {
+                if (sqlConn.State == System.Data.ConnectionState.Open)
+                    sqlConn.Close();
             }
         }
 
@@ -32,14 +38,31 @@ namespace ContaCorrente.DataAccess
         /// <returns></returns>
         public Models.Conta Carregar(long idConta)
         {
+            var retorno = new Models.Conta();
+
             try
             {
-                return sqlConn.Query<Models.Conta>(@"SELECT * FROM [dbo].[Contas] WHERE IDConta = @IDConta", new { IDConta = idConta }).FirstOrDefault();
+                sqlConn.Open();
+                using (var sqlCommand = new SqlCommand(string.Format(@"SELECT * FROM [dbo].[Contas] WHERE IDConta = {0}", idConta), sqlConn))
+                {
+                    SqlDataReader sqlReader = sqlCommand.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+
+                    if (sqlReader.HasRows)
+                        while (sqlReader.Read())
+                            retorno = sqlReader.ConvertModel<Models.Conta>();
+                }
             }
             catch (Exception ex)
             {
                 throw ex;
             }
+            finally
+            {
+                if (sqlConn.State == System.Data.ConnectionState.Open)
+                    sqlConn.Close();
+            }
+
+            return retorno;
         }
 
         /// <summary>
@@ -54,29 +77,37 @@ namespace ContaCorrente.DataAccess
                 var creditos = new MovimentoDao().Creditos(conta.IDConta);
                 var debitos = new MovimentoDao().Debitos(conta.IDConta);
 
-                if (sqlConn.Execute("DELETE [dbo].[Movimentos] WHERE IDConta = @IDConta", new { IDConta = conta.IDConta }) == 1)
-                {
-                    if (sqlConn.Execute(@"DELETE [dbo].[Contas] WHERE IDConta = @IDConta", new { IDConta = conta.IDConta }) == 1)
-                        return true;
-                    else
-                    {
-                        if (creditos != null && creditos.Count > 0)
-                            foreach (var credito in creditos)
-                                new MovimentoDao().Movimenta(credito);
+                sqlConn.Open();
 
-                        if (debitos != null && debitos.Count > 0)
-                            foreach (var debito in debitos)
-                                new MovimentoDao().Movimenta(debito);
+                using (var sqlCommand = new SqlCommand(string.Format("DELETE [dbo].[Movimentos] WHERE IDConta = @IDConta", conta.IDConta), sqlConn))
+                    if (sqlCommand.ExecuteNonQuery() == 1)
+                        using (var sqlCommandSec = new SqlCommand(string.Format("DELETE [dbo].[Contas] WHERE IDConta = @IDConta", conta.IDConta), sqlConn))
+                            if (sqlCommand.ExecuteNonQuery() == 1)
+                            {
+                                if (creditos != null && creditos.Count > 0)
+                                    foreach (var credito in creditos)
+                                        new MovimentoDao().Movimenta(credito);
 
-                        return false;
-                    }
-                }
+                                if (debitos != null && debitos.Count > 0)
+                                    foreach (var debito in debitos)
+                                        new MovimentoDao().Movimenta(debito);
 
+                                return true;
+                            }
+                            else
+
+                                return false;
+            
                 throw new Exception("Não foi possível remover os registros de movimentação da conta!");
             }
             catch (Exception ex)
             {
                 throw ex;
+            }
+            finally
+            {
+                if (sqlConn.State == System.Data.ConnectionState.Open)
+                    sqlConn.Close();
             }
         }
 
@@ -86,14 +117,31 @@ namespace ContaCorrente.DataAccess
         /// <returns></returns>
         public List<Models.Conta> Listar()
         {
+            var retorno = new List<Models.Conta>();
+
             try
             {
-                return sqlConn.Query<Models.Conta>(@"SELECT * FROM [dbo].[Contas]").ToList();
+                sqlConn.Open();
+                using (var sqlCommand = new SqlCommand(@"SELECT * FROM [dbo].[Contas]", sqlConn))
+                {
+                    SqlDataReader sqlReader = sqlCommand.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+
+                    if (sqlReader.HasRows)
+                        while (sqlReader.Read())
+                            retorno.Add(sqlReader.ConvertModel<Models.Conta>());
+                }
             }
             catch (Exception ex)
             {
                 throw ex;
             }
+            finally
+            {
+                if (sqlConn.State == System.Data.ConnectionState.Open)
+                    sqlConn.Close();
+            }
+
+            return retorno;
         }
         #endregion
     }
