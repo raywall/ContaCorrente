@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Dapper;
+using System.Data.SqlClient;
 
 namespace ContaCorrente.DataAccess
 {
@@ -17,11 +16,23 @@ namespace ContaCorrente.DataAccess
         {
             try
             {
-                return (sqlConn.Execute(@"INSERT INTO [dbo].[Usuarios] (Username, Password) VALUES (@Username, @Password)", new { IDConta = usuario.Username, @Password = usuario.Password }) == 1);
+                sqlConn.Open();
+
+                var sqlCommand = new SqlCommand(@"INSERT INTO [dbo].[Usuarios] (Username, Password) VALUES (@Username, @Password)", sqlConn);
+
+                sqlCommand.Parameters.Add("@Username", System.Data.SqlDbType.VarBinary).Value = usuario.Username;
+                sqlCommand.Parameters.Add("@Password", System.Data.SqlDbType.VarBinary).Value = usuario.Password;
+
+                return (sqlCommand.ExecuteNonQuery() == 1);
             }
             catch (Exception ex)
             {
                 throw ex;
+            }
+            finally
+            {
+                if (sqlConn != null && sqlConn.State == System.Data.ConnectionState.Open)
+                    sqlConn.Close();
             }
         }
 
@@ -32,14 +43,32 @@ namespace ContaCorrente.DataAccess
         /// <returns></returns>
         public Models.Usuario Carregar(long idUsuario)
         {
+            var retorno = new Models.Usuario();
+
             try
             {
-                return sqlConn.Query<Models.Usuario>(@"SELECT * FROM [dbo].[Usuarios] WHERE ID = @IDUsuario", new { IDUsuario = idUsuario }).FirstOrDefault();
+                sqlConn.Open();
+
+                var sqlCommand = new SqlCommand(@"SELECT * FROM [dbo].[Usuarios] WHERE ID = @IDUsuario", sqlConn);
+                sqlCommand.Parameters.Add("@IDUsuario", System.Data.SqlDbType.BigInt).Value = idUsuario;
+
+                SqlDataReader sqlReader = sqlCommand.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+
+                if (sqlReader.HasRows)
+                    while (sqlReader.Read())
+                        retorno = sqlReader.ConvertModel<Models.Usuario>();
             }
             catch (Exception ex)
             {
                 throw ex;
             }
+            finally
+            {
+                if (sqlConn != null && sqlConn.State == System.Data.ConnectionState.Open)
+                    sqlConn.Close();
+            }
+
+            return retorno;
         }
 
         /// <summary>
@@ -49,14 +78,32 @@ namespace ContaCorrente.DataAccess
         /// <returns></returns>
         public Models.Usuario Carregar(string username)
         {
+            var retorno = new Models.Usuario();
+
             try
             {
-                return sqlConn.Query<Models.Usuario>(@"SELECT * FROM [dbo].[Usuarios] WHERE Username = @Username", new { Username = username }).FirstOrDefault();
+                sqlConn.Open();
+
+                var sqlCommand = new SqlCommand(@"SELECT * FROM [dbo].[Usuarios] WHERE Username = @Username", sqlConn);
+                sqlCommand.Parameters.Add("@Username", System.Data.SqlDbType.VarChar).Value = username;
+
+                SqlDataReader sqlReader = sqlCommand.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+
+                if (sqlReader.HasRows)
+                    while (sqlReader.Read())
+                        retorno = sqlReader.ConvertModel<Models.Usuario>();
             }
             catch (Exception ex)
             {
                 throw ex;
             }
+            finally
+            {
+                if (sqlConn != null && sqlConn.State == System.Data.ConnectionState.Open)
+                    sqlConn.Close();
+            }
+
+            return retorno;
         }
 
         /// <summary>
@@ -65,14 +112,31 @@ namespace ContaCorrente.DataAccess
         /// <returns></returns>
         public List<Models.Usuario> Listar()
         {
+            var retorno = new List<Models.Usuario>();
+
             try
             {
-                return sqlConn.Query<Models.Usuario>(@"SELECT * FROM [dbo].[Usuarios]").ToList();
+                sqlConn.Open();
+                using (var sqlCommand = new SqlCommand(@"SELECT * FROM [dbo].[Usuarios]", sqlConn))
+                {
+                    SqlDataReader sqlReader = sqlCommand.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+
+                    if (sqlReader.HasRows)
+                        while (sqlReader.Read())
+                            retorno.Add(sqlReader.ConvertModel<Models.Usuario>());
+                }
             }
             catch (Exception ex)
             {
                 throw ex;
             }
+            finally
+            {
+                if (sqlConn != null && sqlConn.State == System.Data.ConnectionState.Open)
+                    sqlConn.Close();
+            }
+
+            return retorno;
         }
         #endregion
     }
